@@ -1,22 +1,45 @@
-# name: Testing G-Actions stuff
+name: Testing G-Actions stuff
 
-# on:
-#   push:
-#     branches:
-#       - feature
+on:
+  push:
+    branches:
+      - feature
 
-# jobs:
-#   a_test_job_v7:
-#     runs-on: ubuntu-18.04
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v2
-#       - name: commits with if
-#         if: ${{ github.event_name == 'push' && false == contains(toJson(github.event.commits.*.message), '#skip') }}
-#         env:
-#           COMMITS: ${{ toJson(github.event.commits) }}
-#         run: echo "$COMMITS"
-#       - name: commit messages joined
-#         env:
-#           COMMIT_MESSAGES: ${{ join(github.event.commits.*.message, '; ') }}
-#         run: echo "$COMMIT_MESSAGES"
+jobs:
+  a_test_job_v7:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: commits with if
+        if: ${{ github.event_name == 'push' && false == contains(toJson(github.event.commits.*.message), '#skip') }}
+        env:
+          COMMITS: ${{ toJson(github.event.commits) }}
+        run: echo "$COMMITS"
+      - name: commit messages joined
+        env:
+          COMMIT_MESSAGES: ${{ join(github.event.commits.*.message, '; ') }}
+        run: echo "$COMMIT_MESSAGES"
+      - name: build/tests failed message
+        if: ${{ failure() }}
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_BOT_URL }}
+      - name: job was successful message
+        if: ${{ success() }}
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          fields: repo,commit,author,took
+          custom_payload: |
+           {
+             attachments: [{
+               color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+               text: `A new version was deployed to https://mooc-part11.herokuapp.com/ with commit ${process.env.AS_COMMIT} of ${process.env.AS_REPO} by ${process.env.AS_AUTHOR} and build took ${process.env.AS_TOOK}`
+             }]
+           }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_BOT_URL }}
