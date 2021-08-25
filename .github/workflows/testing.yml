@@ -6,7 +6,7 @@ on:
       - feature
 
 jobs:
-  a_test_job_v3:
+  a_test_job_v4:
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout code
