@@ -21,7 +21,7 @@ jobs:
           COMMIT_MESSAGES: ${{ join(github.event.commits.*.message, '; ') }}
         run: echo "$COMMIT_MESSAGES"
       - name: build/tests failed message
-        if: ${{ failure }}
+        if: ${{ failure() }}
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
