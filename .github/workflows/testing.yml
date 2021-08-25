@@ -6,13 +6,13 @@
 #       - feature
 
 # jobs:
-#   a_test_job_v5:
+#   a_test_job_v7:
 #     runs-on: ubuntu-18.04
 #     steps:
 #       - name: Checkout code
 #         uses: actions/checkout@v2
 #       - name: commits with if
-#         if: ${{ false == contains(toJson(github.event.commits.*.message), '#skip') }}
+#         if: ${{ github.event_name == 'push' && false == contains(toJson(github.event.commits.*.message), '#skip') }}
 #         env:
 #           COMMITS: ${{ toJson(github.event.commits) }}
 #         run: echo "$COMMITS"
