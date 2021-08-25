@@ -1,0 +1,19 @@
+name: Periodic health check
+
+on:
+  # schedule:
+  #   - cron: '3 * * * *'
+  push:
+    branches:
+      - master
+
+jobs:
+  ping_the_app_periodically:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: ping the app
+        uses: jtalk/url-health-check-action@1.5
+        with:
+          url: https://mooc-part11.herokuapp.com/
+          max-attempts: 3
+          retry-delay: 5s
