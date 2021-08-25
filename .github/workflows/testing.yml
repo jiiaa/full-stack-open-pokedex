@@ -38,7 +38,7 @@ jobs:
            {
              attachments: [{
                color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-               text: `A new version was deployed to https://mooc-part11.herokuapp.com/ ${process.env.AS_COMMIT} OF ${process.env.AS_REPO} by ${process.env.AS_AUTHOR} and build took ${process.env.AS_TOOK}`
+               text: `A new version was deployed to https://mooc-part11.herokuapp.com/ with commit ${process.env.AS_COMMIT} of ${process.env.AS_REPO} by ${process.env.AS_AUTHOR} and build took ${process.env.AS_TOOK}`
              }]
            }
         env:
