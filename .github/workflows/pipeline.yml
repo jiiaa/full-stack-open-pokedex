@@ -65,13 +65,13 @@ jobs:
         if: ${{ success() }}
         uses: 8398a7/action-slack@v3
         with:
-          status: ${{ job.status }}
-          fiedls: repo,message,commit,author,action,eventName,ref,workflow,job,took
+          status: custom
+          fields: repo,commit,author,took
           custom_payload: |
            {
              attachments: [{
                color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-               text: `A new version was deployed to https://mooc-part11.herokuapp.com/ ${process.env.AS_COMMIT} of ${process.env.AS_REPO} by ${process.env.AS_AUTHOR} and build took ${process.env.AS_TOOK}`
+               text: `A new version was deployed to https://mooc-part11.herokuapp.com/ with commit ${process.env.AS_COMMIT} of ${process.env.AS_REPO} by ${process.env.AS_AUTHOR} and build took ${process.env.AS_TOOK}`
              }]
            }
         env:
