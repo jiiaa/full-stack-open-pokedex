@@ -12,7 +12,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: commits
-        if: ${{ contains(github.event.commits, '#skip') }}
+        if: ${{ contains(github.event.commits.*.message, '#skip') }}
         env:
           COMMITS: ${{ toJson(github.event.commits) }}
         run: echo "$COMMITS"
