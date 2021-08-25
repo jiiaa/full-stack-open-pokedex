@@ -3,19 +3,16 @@ name: Testing G-Actions stuff
 on:
   push:
     branches:
-      - master
+      - feature
 
 jobs:
-  a_test_job:
+  a_test_job_v2:
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: github context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
       - name: commits
+        if: ${{ contains(gitub.event.commits, '#skip') }}
         env:
           COMMITS: ${{ toJson(github.event.commits) }}
         run: echo "$COMMITS"
